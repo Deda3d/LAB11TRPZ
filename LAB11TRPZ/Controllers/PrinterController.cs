@@ -1,33 +1,46 @@
 ﻿using LAB11TRPZ.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace LAB11TRPZ.Controllers;
-
-public class PrintersController : Controller
+namespace LAB11TRPZ.Controllers
 {
-    private readonly Lab11DBContext _context;
-
-    public PrintersController(Lab11DBContext context)
+    public class PrinterController : Controller
     {
-        _context = context;
-    }
+        private readonly Lab11DBContext _context;
 
-    // Вивести лазерні принтери однієї марки
-    public async Task<IActionResult> LaserPrintersByBrand(string brand)
-    {
-        if (string.IsNullOrEmpty(brand))
+        public PrinterController(Lab11DBContext context)
         {
-            return BadRequest("Марка не вказана.");
+            _context = context;
         }
 
-        // Фільтрація лазерних принтерів певної марки
-        var printers = await _context.Printers
-            .Include(p => p.PrinterModel)
-            .Include(p => p.PrinterType)
-            .Where(p => p.PrinterType.TypeName == "Laser" && p.PrinterModel.Manufacturer == brand)
-            .ToListAsync();
+        // Метод для отображения списка принтеров
+        public async Task<IActionResult> Index(string manufacturer = null)
+        {
+            try
+            {
+                // Фильтруем только лазерные принтеры определенной марки
+                var printersQuery = _context.Printers
+                    .Include(p => p.PrinterModel)
+                    .Include(p => p.PrinterType)
+                    .Where(p => p.PrinterType.TypeName == "Laser");
 
-        return View(printers);
+                if (!string.IsNullOrEmpty(manufacturer))
+                {
+                    printersQuery = printersQuery.Where(p => p.PrinterModel.Manufacturer == manufacturer);
+                }
+
+                var printers = await printersQuery.ToListAsync();
+                return View(printers);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при загрузке принтеров: {ex.Message}");
+                return View(new List<Printer>());
+            }
+        }
     }
 }

@@ -1,21 +1,23 @@
+using LAB11TRPZ.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+// Добавляем контекст базы данных в контейнер зависимостей
+builder.Services.AddDbContext<Lab11DBContext>(options =>
+    options.UseSqlServer("Data Source=ALEX;Initial Catalog=Lab11DB;Integrated Security=True;Pooling=False;TrustServerCertificate=True;"));
 
-// Добавляем регистрацию контекста базы данных с использованием строки подключения
-builder.Services.AddDbContext<LAB11TRPZ.Models.Lab11DBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); // Подключение к базе данных
+// Добавляем поддержку контроллеров и представлений
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Настраиваем конвейер обработки запросов
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
@@ -26,6 +28,9 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapRazorPages();
+// Настраиваем маршруты для контроллеров
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Printer}/{action=Index}/{id?}");
 
 app.Run();

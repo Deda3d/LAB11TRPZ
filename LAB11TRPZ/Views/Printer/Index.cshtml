@@ -1,0 +1,54 @@
+﻿@model IEnumerable<LAB11TRPZ.Models.Printer>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printers List</title>
+</head>
+<body>
+    <h1>Printers List</h1>
+
+    <!-- Форма для фильтрации -->
+    <form method="get" action="/Printer/Index">
+        <label for="manufacturer">Manufacturer:</label>
+        <input type="text" id="manufacturer" name="manufacturer" placeholder="Enter Manufacturer (e.g., HP)">
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- Таблица с данными -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Serial Number</th>
+                <th>Model Name</th>
+                <th>Type</th>
+                <th>Manufacturer</th>
+                <th>Release Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var printer in Model)
+                {
+                    <tr>
+                        <td>@printer.SerialNumber</td>
+                        <td>@printer.PrinterModel.ModelName</td>
+                        <td>@printer.PrinterType.TypeName</td>
+                        <td>@printer.PrinterModel.Manufacturer</td>
+                        <td>@printer.ReleaseDate?.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">No printers found matching the criteria.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
