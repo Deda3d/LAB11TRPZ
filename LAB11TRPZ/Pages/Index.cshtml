@@ -1,0 +1,36 @@
+﻿@page
+@model LAB11TRPZ.Pages.IndexModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printers List</title>
+</head>
+<body>
+    <h1>Printers List</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Serial Number</th>
+                <th>Model Name</th>
+                <th>Type</th>
+                <th>Release Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var printer in Model.Printers)
+            {
+                <tr>
+                    <td>@printer.SerialNumber</td>
+                    <td>@printer.PrinterModel.ModelName</td>
+                    <td>@printer.PrinterType.TypeName</td>
+                    <td>@printer.ReleaseDate?.ToString("yyyy-MM-dd")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

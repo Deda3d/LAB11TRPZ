@@ -1,0 +1,20 @@
+﻿erDiagram
+  Printer {
+    PrinterID int PK
+    SerialNumber nvarchar(50) 
+    PrinterModelID int(NULL) FK
+    PrinterTypeID int(NULL) FK
+    ReleaseDate date(NULL) 
+  }
+  Printer }o--|| PrinterModel : FK__Printer__Printer__3D5E1FD2
+  Printer }o--|| PrinterType : FK__Printer__Printer__3E52440B
+  PrinterModel {
+    PrinterModelID int PK
+    ModelName nvarchar(50) 
+    Manufacturer nvarchar(50)(NULL) 
+  }
+  PrinterType {
+    PrinterTypeID int PK
+    TypeName nvarchar(50) 
+    Description nvarchar(255)(NULL) 
+  }

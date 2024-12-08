@@ -1,0 +1,29 @@
+﻿@model IEnumerable<LAB11TRPZ.Models.Printer>
+
+@{
+    ViewData["Title"] = "Laser Printers by Brand";
+}
+
+<h1>Laser Printers by @ViewData["Brand"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Serial Number</th>
+            <th>Model Name</th>
+            <th>Manufacturer</th>
+            <th>Release Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var printer in Model)
+        {
+            <tr>
+                <td>@printer.SerialNumber</td>
+                <td>@printer.PrinterModel.ModelName</td>
+                <td>@printer.PrinterModel.Manufacturer</td>
+                <td>@printer.ReleaseDate?.ToString("yyyy-MM-dd")</td>
+            </tr>
+        }
+    </tbody>
+</table>
